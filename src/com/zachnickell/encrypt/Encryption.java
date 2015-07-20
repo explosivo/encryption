@@ -9,12 +9,20 @@ public class Encryption
 		Random rand = new Random(System.currentTimeMillis());
 		int n = 3;
 		Matrix key = new Matrix(n, n);
-		for (int y = 0; y < n; y ++)
+		boolean isInvertible = false;
+		while (!isInvertible)
 		{
-			for (int x = 0; x < n; x ++)
+			for (int y = 0; y < n; y ++)
 			{
-				double element = rand.nextInt(255) + 1;
-				key.set(element, y, x);
+				for (int x = 0; x < n; x ++)
+				{
+					double element = rand.nextInt(255) + 1;
+					key.set(element, y, x);
+				}
+			}
+			if (key.determinant() != 0)
+			{
+				isInvertible = true;
 			}
 		}
 		return key;
@@ -23,11 +31,8 @@ public class Encryption
 	public static Matrix encrypt(Matrix key, String s)
 	{
 		int height = 3;
-		int width = s.length() / 3 + s.length() % 3;
+		int width = s.length() / height + s.length() % height;
 		Matrix result = new Matrix(height, width);
-		System.out.println("\nencrypt started");
-		System.out.println("key");
-		key.print();
 		
 		int i = 0;
 		for (int y = 0; y < height; y ++)
@@ -45,24 +50,13 @@ public class Encryption
 				i ++;
 			}
 		}
-		result.print();
-		key.multiply(result).print();
 		return key.multiply(result);
 	}
 
 	public static String decrypt(Matrix key, Matrix m)
 	{
 		String message = "";
-		System.out.println("\n\ndecrypt started");
-		System.out.println("key");
-		key.print();
-		System.out.println("inverse");
-		key.inverse().print();
-		System.out.println("m");
-		m.print();
 		Matrix antikey = key.inverse();
-		System.out.println("message matrix");
-		antikey.multiply(m).print();
 		Matrix matrix = key.inverse().multiply(m);
 		for (int y = 0; y < matrix.height; y ++)
 		{

@@ -32,6 +32,28 @@ public class Matrix
 			}
 		}
 	}
+	
+	public Matrix(String s)
+	{
+		String tokens[] = s.split(" ");
+    	for (int i = 0; i < tokens.length; i ++)
+    	{
+    		if (i == 0)
+    		{
+    			height = Integer.valueOf(tokens[i]);
+    		}
+    		else if (i == 1)
+    		{
+    			width = Integer.valueOf(tokens[i]);
+    			elements = new double[height][width];
+    		}
+    		else
+    		{
+    			double element = Double.valueOf(tokens[i]);
+    			set(element, (i - 2) / height, (i - 2) % width);
+    		}
+    	}
+	}
 
 	public double get(int y, int x)
 	{
@@ -232,5 +254,19 @@ public class Matrix
 			}
 		}
 		return result;
+	}
+	
+	public String toString()
+	{
+		String s = "";
+		s += height + " " + width;
+		for (int y = 0; y < height; y ++)
+		{
+			for (int x = 0; x < width; x ++)
+			{
+				s += " " + get(y, x);
+			}
+		}
+		return s;
 	}
 }
