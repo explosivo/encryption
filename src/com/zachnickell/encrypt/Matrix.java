@@ -109,6 +109,7 @@ public class Matrix
 		for (int j = 0; j < height; j ++)
 		{
 			if (j == y)
+			
 				continue;
 			yy ++;
 			int xx = -1;
@@ -129,7 +130,7 @@ public class Matrix
 		{
 			for (int x = 0; x < width; x ++)
 			{
-				matrix.set(isEven(y) * -isEven(y) * partMatrix(y, x).determinant(), y, x);
+				matrix.set(isEven(x) * -isEven(y) * partMatrix(y, x).determinant(), y, x);
 			}
 		}
 		return matrix;
@@ -137,7 +138,28 @@ public class Matrix
 
 	public Matrix inverse()
 	{
-		return cofactor().multiply(1.0/determinant()).transpose();
+		return cofactor().transpose().multiply(1.0/determinant());
+	}
+	
+	public Matrix inverse3()
+	{
+		double a = get(0, 0);
+		double b = get(0, 1);
+		double c = get(0, 2);
+		double d = get(1, 0);
+		double e = get(1, 1);
+		double f = get(1, 2);
+		double g = get(2, 0);
+		double h = get(2, 1);
+		double i = get(2, 2);
+		
+		double determinant = a * e * i + b * f * g + c * d * h - c * e * g - b * d * i - a * f * h;
+		
+		System.out.println("det " + determinant);
+		
+		Matrix inverse = multiply(1 / determinant);
+		
+		return inverse;
 	}
 
 	public Matrix multiply(Matrix m)
@@ -150,13 +172,11 @@ public class Matrix
 			{
 				for (int x = 0; x < m.width; x ++)
 				{
-					int element = 0;
+					double element = 0;
 					for (int i = 0; i < width; i ++)
 					{
 						element += get(y, i) * m.get(i, x);	 
-						System.out.println(element);
 					}
-					System.out.println();
 					result.set(element, y, x);
 				}
 			}

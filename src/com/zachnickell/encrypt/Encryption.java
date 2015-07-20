@@ -23,34 +23,37 @@ public class Encryption
 	public static Matrix encrypt(Matrix key, String s)
 	{
 		int height = 3;
-		int width = 2;
-		Matrix result = new Matrix(height, 2);
-		result.print();
+		int width = s.length() / 3 + s.length() % 3;
+		Matrix result = new Matrix(height, width);
+		System.out.println("\nencrypt started");
+		System.out.println("key");
+		key.print();
+		
 		int i = 0;
 		for (int y = 0; y < height; y ++)
 		{
 			for (int x = 0; x < width; x ++)
 			{
-				System.out.println(i);
 				if (i >= s.length())
 				{
 					break;	
 				}
 				else 
 				{
-					System.out.println(s.charAt(i) + " " + y + " " + x);
 					result.set((double) s.charAt(i), y, x);
 				}
 				i ++;
 			}
 		}
+		result.print();
+		key.multiply(result).print();
 		return key.multiply(result);
 	}
 
 	public static String decrypt(Matrix key, Matrix m)
 	{
 		String message = "";
-		System.out.println("\n\nso it starts");
+		System.out.println("\n\ndecrypt started");
 		System.out.println("key");
 		key.print();
 		System.out.println("inverse");
@@ -69,7 +72,7 @@ public class Encryption
 				{
 					break;
 				}
-				message += (char) matrix.get(y, x);
+				message += (char) Math.round(matrix.get(y, x));
 			}
 		}
 		return message;
